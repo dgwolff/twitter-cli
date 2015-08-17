@@ -14,12 +14,15 @@ end
 timeline = client.home_timeline.reverse
 mentions = client.mentions.reverse
 
+puts "Welcome to twitter_cli."
+
 loop do
-  puts "Welcome to twitter_cli. What would you like to do?"
+  puts "What would you like to do?"
   puts "t = View your timeline"
   puts "s = Send a tweet"
   puts "m = View your mentions"
   puts "h = #hashtag search"
+  puts "q = Quit"
 
   choice = gets.chomp.downcase
 
@@ -45,6 +48,9 @@ loop do
       puts tweet.text + " FROM @#{tweet.user.screen_name}"
       puts "\n"
     end
+  when "q"
+    puts "Goodbye!"
+    exit
   else
     puts "Sorry, that's not a valid option. Please try again."
   end
