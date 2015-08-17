@@ -10,27 +10,30 @@ client = TwitterOAuth::Client.new(
   token: TWITTER_ACCESS_TOKEN,
   secret: TWITTER_ACCESS_SECRET)
 
-case ARGV[0]
-when "-l"
-  timeline = client.home_timeline()
-  timeline = timeline.reverse
-  timeline.each{ |tweet|
-    puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
-    puts "\n"
-  }
-when "-u"
-  if ARGV[1].nil?
+timeline = client.home_timeline.reverse
+mentions = client.mentions.reverse
+
+loop do
+  puts "Welcome to twitter_cli. What would you like to do?"
+  puts "t = View your timeline"
+  puts "s = Send a tweet"
+  puts "m = View your mentions"
+  choice = gets.chomp.downcase
+
+  case choice
+  when "t"
+    timeline.each { |tweet|
+      puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
+      puts "\n"
+    }
+  when "s"
     puts "Please enter your status:"
     status = STDIN.readline.chomp
     client.update("#{status}")
-  else
-    client.update("#{ARGV[1]}")
+  when "m"
+    mentions.each { |tweet|
+      puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
+      puts "\n"
+    }
   end
-when "-m"
-  mentions = client.mentions()
-  mentions = mentions.reverse
-  mentions.each{ |tweet|
-    puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
-    puts "\n"
-  }
 end
