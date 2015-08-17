@@ -18,22 +18,23 @@ loop do
   puts "t = View your timeline"
   puts "s = Send a tweet"
   puts "m = View your mentions"
+
   choice = gets.chomp.downcase
 
   case choice
   when "t"
-    timeline.each { |tweet|
+    timeline.each do |tweet|
       puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
       puts "\n"
-    }
+    end
   when "s"
     puts "Please enter your status:"
     status = STDIN.readline.chomp
     client.update("#{status}")
   when "m"
-    mentions.each { |tweet|
+    mentions.each do |tweet|
       puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
       puts "\n"
-    }
+    end
   end
 end
