@@ -30,7 +30,7 @@ loop do
       puts "\n"
     end
   when "s"
-    puts "Please enter your status:"
+    puts "Please enter your tweet:"
     status = STDIN.readline.chomp
     client.update("#{status}")
   when "m"
