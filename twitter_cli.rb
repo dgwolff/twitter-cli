@@ -18,6 +18,7 @@ loop do
   puts "t = View your timeline"
   puts "s = Send a tweet"
   puts "m = View your mentions"
+  puts "h = #hashtag search"
 
   choice = gets.chomp.downcase
 
@@ -36,5 +37,13 @@ loop do
       puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
       puts "\n"
     end
+  when "h"
+    puts "Enter a hashtag to search for (remember to include the # symbol)"
+    hashtag = gets.chomp.downcase
+    client.search(hashtag).take(10).each do |tweet|
+      puts tweet["text"]
+    end
+  else
+    puts "Sorry, that's not a valid option. Please try again."
   end
 end
