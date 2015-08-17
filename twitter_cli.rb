@@ -1,14 +1,15 @@
 #!/usr/bin/env ruby
 
 require "rubygems"
-require "twitter_oauth"
+require "twitter"
 require_relative "secrets"
 
-client = TwitterOAuth::Client.new(
-  consumer_key: TWITTER_CONSUMER_KEY,
-  consumer_secret: TWITTER_CONSUMER_SECRET,
-  token: TWITTER_ACCESS_TOKEN,
-  secret: TWITTER_ACCESS_SECRET)
+client = Twitter::REST::Client.new do |config|
+  config.consumer_key = TWITTER_CONSUMER_KEY
+  config.consumer_secret = TWITTER_CONSUMER_SECRET
+  config.access_token = TWITTER_ACCESS_TOKEN
+  config.access_token_secret = TWITTER_ACCESS_SECRET
+end
 
 timeline = client.home_timeline.reverse
 mentions = client.mentions.reverse
@@ -25,7 +26,7 @@ loop do
   case choice
   when "t"
     timeline.each do |tweet|
-      puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
+      puts tweet.text + " FROM @#{tweet.user.screen_name}"
       puts "\n"
     end
   when "s"
@@ -34,14 +35,15 @@ loop do
     client.update("#{status}")
   when "m"
     mentions.each do |tweet|
-      puts tweet["text"] + " @FROM #{tweet["user"]["name"]}"
+      puts tweet.text + " FROM @#{tweet.user.screen_name}"
       puts "\n"
     end
   when "h"
-    puts "Enter a hashtag to search for (remember to include the # symbol)"
+    puts "Enter a hashtag to search for (remember to include the # symbol):"
     hashtag = gets.chomp.downcase
     client.search(hashtag).take(10).each do |tweet|
-      puts tweet["text"]
+      puts tweet.text + " FROM @#{tweet.user.screen_name}"
+      puts "\n"
     end
   else
     puts "Sorry, that's not a valid option. Please try again."
